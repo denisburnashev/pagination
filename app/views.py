@@ -20,14 +20,17 @@ def index(request):
 def bus_stations(request):
 
     current_page = int(request.GET.get('page', 1))
-    params = {'page': current_page+1}
-    next_page_params = urllib.parse.urlencode(params)
+    params_next_page = {'page': current_page+1}
+    params_prev_page = {'page': current_page-1}
+    next_page_params = urllib.parse.urlencode(params_next_page)
+    prev_page_params = urllib.parse.urlencode(params_prev_page)
     next_page_url = reverse('bus_stations')+'?'+next_page_params
+    prev_page_url = reverse('bus_stations')+'?'+prev_page_params
     paginator = Paginator(CONTENT, 10)
     page = paginator.page(current_page)
     return render(request, 'index.html', context={
         'bus_stations': page,
         'current_page': current_page,
-        'prev_page_url': None,
+        'prev_page_url': prev_page_url,
         'next_page_url': next_page_url,
     })
